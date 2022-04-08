@@ -53,7 +53,7 @@ dataset <- dataset |>
 
 dataset <- dataset |>
   mutate("int_sim" = INT_PARLAMENT_VOT_R,
-         "int_sim" = case_when(INT_PARLAMENT_VOT_R >= 98 & as.numeric(SIMPATIA_PARTIT_R) !=95 ~ as.numeric(SIMPATIA_PARTIT_R),
+         "int_sim" = case_when(((INT_PARLAMENT_VOT_R >= 98) & (as.numeric(SIMPATIA_PARTIT_R) !=95)) ~ as.numeric(SIMPATIA_PARTIT_R),
                                TRUE ~ int_sim))
 
 
@@ -138,14 +138,13 @@ freqs <- freqs |>
                               Partit == "21" ~ "JxCat",
                               Partit == "22" ~ "CEC-Podem",
                               Partit == "23" ~ "Vox",
-                              Partit == "80" ~ "Altres",
-                              Partit == "93" ~ "Nul, Blanc, Abstenció")) |>
+                              Partit == "80" ~ "Altres + blanc",
+                              Partit == "93" ~ "Nul, Abstenció")) |>
   dplyr::arrange(desc(`Proporció`))
 
-colors <- c("PPC" = "#0bb2ff", "ERC" = "#FFB232", "PSC" = "#E73B39",
-            "CUP" = "#ffed00", "C's" = "#EB6109", "JxCat" = "#00C3B2",
-            "CEC-Podem" = "#C3113B", "Vox" = "#63BE21", "Altres" = "blue",
-            "Nul, Blanc, Abstenció" = "gray")
+colors <- c("PSC" = "#E73B39", "ERC" = "#FFB232", "JxCat" = "#00C3B2",
+            "CEC-Podem" = "#C3113B", "Vox" = "#63BE21", "CUP" = "#ffed00", 
+            "PPC" = "#0bb2ff", "C's" = "#EB6109", "Altres + blanc" = "gray")
 
 ggplot(freqs, aes(x=reorder(Partit, Proporció), y=Proporció, fill=Partit))+
   geom_bar(width = 1, stat = "identity") + 
@@ -157,5 +156,4 @@ ggplot(freqs, aes(x=reorder(Partit, Proporció), y=Proporció, fill=Partit))+
        caption = "Font: CEO",
        x = "Partit",
        y = "% vot vàlid")
-       )
   
